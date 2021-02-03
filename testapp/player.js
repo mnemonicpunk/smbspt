@@ -69,7 +69,7 @@ export default class Player extends Entity {
             }
     
             this.move_ticks++; 
-            if (this.move_ticks >= 5) {
+            if (this.move_ticks >= 3) {
     
                 let p = scene.add(new Poop(scene.gamekit));
                 p.x = this.x;

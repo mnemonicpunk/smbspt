@@ -33,15 +33,15 @@ export default class GameKit {
         this.setResolution(this.canvas.clientWidth, this.canvas.clientHeight);
 
         let timestamp = performance.now();
-        console.log(timestamp);
 
         let _draw = function() {
             self.draw();
-            window.requestAnimationFrame(_draw);
+
             if (performance.now() - timestamp > 1000/self._tick_num) {
                 timestamp = performance.now();
                 self.tick();
             }
+            window.requestAnimationFrame(_draw);
         }
         /*let _tick = function() {
             self.tick();
