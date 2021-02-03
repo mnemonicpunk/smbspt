@@ -32,17 +32,24 @@ export default class GameKit {
 
         this.setResolution(this.canvas.clientWidth, this.canvas.clientHeight);
 
+        let timestamp = performance.now();
+        console.log(timestamp);
+
         let _draw = function() {
             self.draw();
             window.requestAnimationFrame(_draw);
+            if (performance.now() - timestamp > 1000/self._tick_num) {
+                timestamp = performance.now();
+                self.tick();
+            }
         }
-        let _tick = function() {
+        /*let _tick = function() {
             self.tick();
             window.setTimeout(_tick, 1000/self._tick_num);
-        }
+        }*/
 
         _draw();
-        _tick();
+        //_tick();
     }
     draw() {
         // first clear the screen canvas
