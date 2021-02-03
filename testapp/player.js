@@ -93,11 +93,10 @@ export default class Player extends Entity {
             }
     
             // if we are outside the play space: die
-            if ((this.x < 0) || (this.y < 0) || (this.x > 1980/2) || (this.y > 1080/2)) {
+            if ((this.x < 0) || (this.y < 0) || (this.x+16 >= 1980/2) || (this.y >= 1080/2)) {
                 this.die(scene);
             }
             
-
             let diffx = this.x - this.sprite.x;
             let diffy = this.y - this.sprite.y;
     
