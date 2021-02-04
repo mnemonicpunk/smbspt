@@ -129,7 +129,7 @@ class Player extends Entity {
         this.dir = 0;
         this.move_ticks = 0;
 
-        this.eaten = 10;
+        this.eaten = 0;
 
         this.alive = true;
         this.death_timer = 0;
