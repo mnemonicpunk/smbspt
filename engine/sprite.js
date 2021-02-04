@@ -10,6 +10,7 @@ export default class Sprite {
         this.rotation = 0;
         this.alpha = 1;
         this.options = options;
+        this.position_tween = 1;
 
         this.applyOptions(options);
     }
@@ -22,7 +23,10 @@ export default class Sprite {
             this.x_scale = options.x_scale;
         }
         if (typeof options.y_scale !== "undefined") {
-            this.xy_scale = options.y_scale;
+            this.y_scale = options.y_scale;
+        }
+        if (typeof options.position_tween !== "undefined") {
+            this.position_tween = options.position_tween;
         }
     }
     _draw(ctx) {
@@ -38,8 +42,16 @@ export default class Sprite {
 
     }
     anchor(entity) {
-        this.x = entity.x;
-        this.y = entity.y;
+        if (this.position_tween == 1) {
+            this.x = entity.x;
+            this.y = entity.y;    
+        } else {
+            let diffx = entity.x - this.x;
+            let diffy = entity.y - this.y;
+    
+            this.x += diffx*this.position_tween;
+            this.y += diffy*this.position_tween;
+        }
         this.animationTick();
     }
     animationTick() {

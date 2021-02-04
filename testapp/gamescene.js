@@ -123,7 +123,8 @@ class Player extends Entity {
             rows: 4,
             scale: 2,
             image_max: 2,
-            ticks_per_frame: 15
+            ticks_per_frame: 15,
+            position_tween: 0.9
         });
 
         this.dir = 0;
@@ -168,11 +169,13 @@ class Player extends Entity {
             this.move_ticks++; 
             if (this.move_ticks >= 3) {
     
-                // poop on the floor and make sure it sticks around long enough
-                let p = scene.add(new Poop());
-                p.x = this.x;
-                p.y = this.y;
-                p.ttl = scene.uptime + this.eaten * 5;
+                if (this.eaten > 0) {
+                    // poop on the floor and make sure it sticks around long enough
+                    let p = scene.add(new Poop());
+                    p.x = this.x;
+                    p.y = this.y;
+                    p.ttl = scene.uptime + this.eaten * 5;
+                }
     
     
                 if (this.dir == 0) {
