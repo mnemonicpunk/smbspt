@@ -1,7 +1,5 @@
 import GameKit from "../engine/gamekit.js";
-import PreloaderScene from "../engine/internal_assets/preloader_scene.js";
 import TitleScene from "./titlescene.js";
-import GameScene from "./gamescene.js";
 
 new GameKit();
 

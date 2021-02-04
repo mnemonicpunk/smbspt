@@ -12,8 +12,8 @@ class GameOverEntity extends Entity {
         });
 
         this.text_banner1 = this.sprite.add(new TextSprite({
-            x: 480,
-            y: 240,
+            x: 960/2,
+            y: 440/2,
             scale: 0.5,
             text: "GAME OVER",
             font: "144px Console",
@@ -22,8 +22,8 @@ class GameOverEntity extends Entity {
         }));
 
         this.text_banner2 = this.sprite.add(new TextSprite({
-            x: 480,
-            y: 315,
+            x: 960/2,
+            y: 630/2,
             scale: 0.5,
             text: this.scoreString(),
             font: "72px Console",

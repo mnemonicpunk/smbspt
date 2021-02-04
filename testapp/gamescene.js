@@ -109,9 +109,7 @@ class Player extends Entity {
 
         this.dir = 0;
         this.move_ticks = 0;
-
         this.eaten = 0;
-
         this.alive = true;
         this.death_timer = 0;
     }
@@ -142,7 +140,6 @@ class Player extends Entity {
         
             this.move_ticks++; 
             if (this.move_ticks >= 3) {
-    
                 if (this.eaten > 0) {
                     // poop on the floor and make sure it sticks around long enough
                     let p = scene.add(new Poop());

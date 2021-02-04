@@ -13,8 +13,8 @@ class TitleEntity extends Entity {
         });
 
         this.text_banner = this.sprite.add(new TextSprite({
-            x: 1920/4,
-            y: 440,
+            x: 960/2,
+            y: 810/2,
             scale: 0.5,
             text: "Press SPACE to start!",
             font: "72px Console",
@@ -37,7 +37,7 @@ class TitleEntity extends Entity {
         let bgm = gamekit.assets.sound('bgm');
 
         bgm.play();
-        if (this.announced == false) {
+        if (!this.announced) {
             let announcers = [
                 'announce2',
                 'announce3'
@@ -45,7 +45,6 @@ class TitleEntity extends Entity {
             let announce = gamekit.assets.sound(announcers[Math.floor(Math.random() * 2)]);
             announce.play();
             this.announced = true;
-
         }    
 
         if (bgm.isPlaying()) {

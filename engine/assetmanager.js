@@ -4,8 +4,6 @@ export class mnAsset {
         this.url = "";
         this.loaded = false;
         this.element = null;
-
-        console.log("Asset " + name + " added.");
     }
     get() {
         return this.element;
@@ -22,7 +20,6 @@ export class mnImage extends mnAsset {
 
         let self = this;
         this.element.addEventListener('load', function() {
-            console.log(name + " loaded");
             self.loaded = true;
         });
         this.element.addEventListener('error', function() {

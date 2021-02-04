@@ -58,6 +58,7 @@ export default class mnLogo extends Entity {
         if (this.progress >= (2*fade_d)+show_d) {
             this.sprite.alpha = 0;
             if (scene.followup_scene != null) {
+                console.log("Preload finished, launching app!");
                 scene.switchScene(scene.followup_scene);
             } else {
                 console.log("Error: Missing scene to switch to")

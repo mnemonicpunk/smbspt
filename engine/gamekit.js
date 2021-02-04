@@ -1,7 +1,6 @@
 import GameKeys from "./gamekeys.js";
 import AssetManager from "./assetmanager.js";
 import PreloaderScene from "./internal_assets/preloader_scene.js";
-import Filter from "./filter.js";
 
 export default class GameKit {
     constructor() {
@@ -11,7 +10,6 @@ export default class GameKit {
         console.log("Setting up buffers");
         this.canvas = document.getElementById('game_canvas');
         this.ctx = this.canvas.getContext('2d');
-
         this.buffer = document.createElement('canvas');
         this.buffer_ctx = this.buffer.getContext('2d');
 
@@ -19,35 +17,29 @@ export default class GameKit {
         this.scale_y = 1;
 
         this.assets = new AssetManager();
+        this.controls = new GameKeys();
 
         this._tick_num = 60;
         this.scene = null;
 
-        this.controls = new GameKeys();
-
         console.log("Hooking up callbacks");
 
         let self = this;
-
         window.addEventListener('resize', function() {
             self.resize();
         });
         self.resize();
-
         this.setResolution(this.canvas.clientWidth, this.canvas.clientHeight);
 
         let timestamp = performance.now();
-
         let _draw = function() {
             self.draw();
-
             if (performance.now() - timestamp > 1000/self._tick_num) {
                 timestamp = performance.now();
                 self.tick();
             }
             window.requestAnimationFrame(_draw);
         }
-
         _draw();
     }
     draw() {
@@ -87,7 +79,7 @@ export default class GameKit {
         if (this.scene != null) {
             this.scene.tick(this);
             if (this.scene._next_scene != null) {
-                this.scene = this.scene._next_scene;
+                this.setScene(this.scene._next_scene);
             }            
         }
         

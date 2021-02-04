@@ -44,8 +44,8 @@ export default class Sprite {
 
         ctx.save();
         ctx.translate(this.x, this.y);
-        ctx.scale(this.x_scale, this.y_scale);
         ctx.rotate(this.rotation * Math.PI / 180);
+        ctx.scale(this.x_scale, this.y_scale);
         ctx.globalAlpha = this.alpha;
         this.draw(ctx);
         for (let i=0; i<this.nodes.length; i++) {
@@ -117,8 +117,7 @@ export class TextSprite extends Sprite {
         }
         if (typeof options.alignment !== "undefined") {
             this.alignment = options.alignment;
-        }      
-        console.dir(this);         
+        }
     }
     draw(ctx) {
         let tx = 0;
