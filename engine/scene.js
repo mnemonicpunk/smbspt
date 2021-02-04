@@ -1,6 +1,9 @@
+import Filter from "./filter.js";
+
 export default class Scene {
     constructor() {
         this.entities = [];
+        this.filter = new Filter(this.entities);
         this.uptime = 0;
 
         this._next_scene = null;
@@ -15,10 +18,16 @@ export default class Scene {
         }
     }
     tick() {
+        this.filter.list = this.entities;
+
         for (let i=0; i<this.entities.length; i++) {
             let e = this.entities[i];
             e.tick(this);
         }   
+        for (let i=0; i<this.entities.length; i++) {
+            let e = this.entities[i];
+            e._builtinMovement(this);
+        }
         for (let i=0; i<this.entities.length; i++) {
             let e = this.entities[i];
             e.sprite.anchor(e);

@@ -26,24 +26,20 @@ class Salad extends Entity {
         });
     }
     tick(scene) {
-        this.timer++;
-        if (this.timer > this.ttl * 5) {
-            scene.remove(this);
-        }
+        let sound_collect = gamekit.assets.sound('salad-collect');
 
-        let p = scene.filterClass(Player);
-        for (let i=0; i<p.length; i++) {
-            if ((p[i].x == this.x) && (p[i].y == this.y)) {
-                p[i].emitDebris(scene);
-                p[i].eaten++;
+        scene.filter.withClass(Player, p => {
+            if ((p.x == this.x) && (p.y == this.y)) {
+                p.emitDebris(scene);
+                p.eaten++;
         
                 this.x = Math.floor(Math.random() * 60) * 16;
                 this.y = Math.floor(Math.random() * 33) * 16;
 
-                gamekit.assets.sound('salad-collect').stop();
-                gamekit.assets.sound('salad-collect').play();
+                sound_collect.stop();
+                sound_collect.play();
             }
-        }
+        });
     }
 }
 
@@ -67,14 +63,11 @@ class Poop extends Entity {
             scene.remove(this);
         }
 
-        let p = scene.filterClass(Player);
-        for (let i=0; i<p.length; i++) {
-            if (p[i].alive) {
-                if ((p[i].x == this.x) && (p[i].y == this.y)) {
-                    p[i].die(scene);
-                }    
-            }
-        }        
+        scene.filter.withClass(Player, p => {
+            if ((p.alive) &&(p.x == this.x) && (p.y == this.y)) {
+                p.die(scene);
+            }    
+        });
     }
 }
 
@@ -92,25 +85,12 @@ class Debris extends Entity {
         });
 
         this.timer = 0;
-        this.xspeed = 0;
-        this.yspeed = 0;
     }
     tick(scene) {
         this.timer++;
         if (this.timer > 30) {
             scene.remove(this);
         }
-
-        this.x += this.xspeed;
-        this.y += this.yspeed;
-
-        this.sprite.animationTick();
-
-        this.sprite.x = this.x;
-        this.sprite.y = this.y;
-    }
-    draw(ctx) {
-        this.sprite._draw(ctx);
     }
 }
 
@@ -136,36 +116,30 @@ class Player extends Entity {
         this.death_timer = 0;
     }
     tick(scene) {
-        if (this.alive == false) {
-            this.death_timer++;
-            if (this.death_timer>120) {
-                let gos = new GameOverScene();
-                gos.updateScore(this.eaten);
-                scene.switchScene(gos);
-            }
-        } else {
-            let bgm = gamekit.assets.sound('game-bgm');
+        let bgm = gamekit.assets.sound('game-bgm');
+        let mspeed = 16;
+
+        let ctrl = gamekit.controls;
+        if (ctrl.check("a")) {
+            this.dir = 2;
+        }
+        if (ctrl.check("d")) {
+            this.dir = 0;
+        }        
+        if (ctrl.check("w")) {
+            this.dir = 3;
+        }
+        if (ctrl.check("s")) {
+            this.dir = 1;
+        }
+
+        this.sprite.visible = this.alive;
+
+        if (this.alive) {
             if (!bgm.isPlaying()) {
                 bgm.play();
             }
-    
-            this.sprite.animationTick();
-    
-            let mspeed = 16;
-            let ctrl = gamekit.controls;
-            if (ctrl.check("a")) {
-                this.dir = 2;
-            }
-            if (ctrl.check("d")) {
-                this.dir = 0;
-            }        
-            if (ctrl.check("w")) {
-                this.dir = 3;
-            }
-            if (ctrl.check("s")) {
-                this.dir = 1;
-            }
-    
+        
             this.move_ticks++; 
             if (this.move_ticks >= 3) {
     
@@ -176,7 +150,6 @@ class Player extends Entity {
                     p.y = this.y;
                     p.ttl = scene.uptime + this.eaten * 5;
                 }
-    
     
                 if (this.dir == 0) {
                     this.x += mspeed;
@@ -197,12 +170,13 @@ class Player extends Entity {
             if ((this.x < 0) || (this.y < 0) || (this.x >= 1920/2) || (this.y >= 1080/2)) {
                 this.die(scene);
             }
-            
-            let diffx = this.x - this.sprite.x;
-            let diffy = this.y - this.sprite.y;
-    
-            this.sprite.x += diffx*0.25;
-            this.sprite.y += diffy*0.25;
+        } else {
+            this.death_timer++;
+            if (this.death_timer>120) {
+                let gos = new GameOverScene();
+                gos.updateScore(this.eaten);
+                scene.switchScene(gos);
+            }
         }
     }
     emitDebris(scene) {
@@ -232,11 +206,6 @@ class Player extends Entity {
 
         gamekit.assets.sound('game-bgm').stop();
         gamekit.assets.sound('egg-death').play();
-    }
-    draw(ctx) {
-        if (this.alive) {
-            this.sprite._draw(ctx);
-        }
     }
 }
 

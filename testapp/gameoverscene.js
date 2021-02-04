@@ -1,17 +1,35 @@
 import Scene from '../engine/scene.js';
 import Entity from "../engine/entity.js";
 import TitleScene from "./titlescene.js";
+import { TextSprite } from "../engine/sprite.js";
 
-export class GameOverEntity extends Entity {
+class GameOverEntity extends Entity {
     constructor() {
         super();
 
         this.sprite.applyOptions({
             scale: 2
         });
-        
-        this.text_timer = 0;
-        this.skip_timer = 0;
+
+        this.text_banner1 = this.sprite.add(new TextSprite({
+            x: 480,
+            y: 240,
+            scale: 0.5,
+            text: "GAME OVER",
+            font: "144px Console",
+            color: "#fff",
+            alignment: "center"
+        }));
+
+        this.text_banner2 = this.sprite.add(new TextSprite({
+            x: 480,
+            y: 315,
+            scale: 0.5,
+            text: this.scoreString(),
+            font: "72px Console",
+            color: "#fff",
+            alignment: "center"
+        }));
 
         this.score = 0;
         this.highscore = 0;
@@ -20,36 +38,16 @@ export class GameOverEntity extends Entity {
         this.score = scene.score;
         this.highscore = scene.highscore;
 
+        this.text_banner2.text = this.scoreString();
+
         gamekit.assets.sound('bgm').play();
 
-        this.skip_timer++;
-        this.text_timer++;
-        if (this.text_timer > 60) {
-            this.text_timer = 0;
-        }
-
-        if (this.skip_timer >= 300) {
+        if (scene.uptime >= 300) {
             scene.switchScene(new TitleScene());    
         }
     }
     scoreString() {
         return "Your Score: " + this.score + " - Highscore: " + this.highscore;
-    }
-    draw(ctx) {
-        super.draw(ctx);
-        
-        ctx.font = "144px Console";
-        ctx.fillStyle = "#fff";
-
-        let txt = "Game Over";
-        let dim = ctx.measureText(txt);
-
-        ctx.fillText(txt, 1920/2 - dim.width/2, 480);
-
-        ctx.font = "72px Console";
-        txt = this.scoreString();
-        dim = ctx.measureText(txt);
-        ctx.fillText(txt, 1920/2 - dim.width/2, 630);
     }
 }
 

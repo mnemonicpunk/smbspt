@@ -8,6 +8,7 @@ export default class Sprite {
         this.x_scale = 1;
         this.y_scale = 1;
         this.rotation = 0;
+        this.visible = true;
         this.alpha = 1;
         this.options = options;
         this.position_tween = 1;
@@ -15,6 +16,12 @@ export default class Sprite {
         this.applyOptions(options);
     }
     applyOptions(options) {
+        if (typeof options.x !== "undefined") {
+            this.x = options.x;
+        }
+        if (typeof options.y !== "undefined") {
+            this.y = options.y;
+        }        
         if (typeof options.scale !== "undefined") {
             this.x_scale = options.scale;
             this.y_scale = options.scale;
@@ -28,14 +35,22 @@ export default class Sprite {
         if (typeof options.position_tween !== "undefined") {
             this.position_tween = options.position_tween;
         }
+        if (typeof options.visible !== "undefined") {
+            this.visible = options.visible;
+        }
     }
     _draw(ctx) {
+        if (!this.visible) { return; }
+
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.scale(this.x_scale, this.y_scale);
         ctx.rotate(this.rotation);
         ctx.globalAlpha = this.alpha;
         this.draw(ctx);
+        for (let i=0; i<this.nodes.length; i++) {
+            this.nodes[i]._draw(ctx);
+        }
         ctx.restore();
     }
     draw(ctx) {
@@ -57,12 +72,89 @@ export default class Sprite {
     animationTick() {
         // we will implement this for animated sprites
     }
+    add(node) {
+        this.nodes.push(node);
+        return node;
+    }
 }
 
 export class StaticImageSprite extends Sprite {
-    draw(ctx, obj) {
+    draw(ctx) {
         let img  = this.options.image;
         ctx.drawImage(img, 0, 0);
+    }
+}
+
+export class TextSprite extends Sprite {
+    constructor(options) {
+        super(options);
+
+        this.font = "12px Arial";
+        this.color = "#000";
+        this.outline = false;
+        this.outline_color = "#000";
+        this.text = "";
+        this.alignment = "left";
+
+        this.applyOptions(options);
+    }
+    applyOptions(options) {
+        super.applyOptions(options);
+        if (typeof options.font !== "undefined") {
+            this.font = options.font;
+        }        
+        if (typeof options.color !== "undefined") {
+            this.color = options.color;
+        }  
+        if (typeof options.outline !== "undefined") {
+            this.outline = options.outline;
+        }   
+        if (typeof options.outline_color !== "undefined") {
+            this.outline_color = options.outline_color;
+        }        
+        if (typeof options.text !== "undefined") {
+            this.text = options.text;
+        }
+        if (typeof options.alignment !== "undefined") {
+            this.alignment = options.alignment;
+        }      
+        console.dir(this);         
+    }
+    draw(ctx) {
+        let tx = 0;
+        let ty = 0;
+
+        ctx.font = this.font;
+        
+        let dim = ctx.measureText(this.text);
+
+        // determine x offset according to alignment
+        switch (this.alignment) {
+            case "right":
+                tx -= dim.width;
+                break;
+            case "center":
+                tx -= dim.width/2;
+                break;
+            default:
+                break;
+        }
+
+        if (this.outline == true) {
+            ctx.fillStyle = this.outline_color;
+
+            ctx.fillText(this.text, tx-1, ty-1);
+            ctx.fillText(this.text, tx-1, ty);
+            ctx.fillText(this.text, tx-1, ty+1);
+            ctx.fillText(this.text, tx, ty-1);
+            ctx.fillText(this.text, tx, ty+1);
+            ctx.fillText(this.text, tx+1, ty-1);
+            ctx.fillText(this.text, tx+1, ty);
+            ctx.fillText(this.text, tx+1, ty+1);
+        }
+
+        ctx.fillStyle = this.color;
+        ctx.fillText(this.text, tx, ty);
     }
 }
 
@@ -85,7 +177,6 @@ export class AnimatedSprite extends Sprite {
         if (typeof options.ticks_per_frame !== "undefined") {
             this.ticks_per_frame = options.ticks_per_frame;
         }        
-    
     }
     animationTick() {
         this._animation_tick++;
@@ -100,7 +191,7 @@ export class AnimatedSprite extends Sprite {
 }
 
 export class SheetSprite extends AnimatedSprite {
-    draw(ctx, obj) {
+    draw(ctx) {
         let img  = this.options.image;
 
         let num = this.image_number;

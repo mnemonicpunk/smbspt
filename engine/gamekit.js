@@ -1,6 +1,7 @@
 import GameKeys from "./gamekeys.js";
 import AssetManager from "./assetmanager.js";
 import PreloaderScene from "./internal_assets/preloader_scene.js";
+import Filter from "./filter.js";
 
 export default class GameKit {
     constructor() {
