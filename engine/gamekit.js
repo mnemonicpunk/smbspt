@@ -4,6 +4,9 @@ import PreloaderScene from "./internal_assets/preloader_scene.js";
 
 export default class GameKit {
     constructor() {
+        // install the engine to the window object
+        window.gamekit = this;
+
         console.log("Setting up buffers");
         this.canvas = document.getElementById('game_canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -43,13 +46,8 @@ export default class GameKit {
             }
             window.requestAnimationFrame(_draw);
         }
-        /*let _tick = function() {
-            self.tick();
-            window.setTimeout(_tick, 1000/self._tick_num);
-        }*/
 
         _draw();
-        //_tick();
     }
     draw() {
         // first clear the screen canvas

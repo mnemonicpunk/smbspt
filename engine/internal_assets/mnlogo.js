@@ -42,7 +42,7 @@ export default class mnLogo extends Entity {
         let fade_d = 30;
         let show_d = 120;
 
-        if (!scene.gamekit.assets.preloadFinished()) {
+        if (!gamekit.assets.preloadFinished()) {
             if (this.progress >= (fade_d+show_d)) {
                 this.progress = fade_d+show_d;
             }

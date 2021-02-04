@@ -10,6 +10,20 @@ export default class Sprite {
         this.rotation = 0;
         this.alpha = 1;
         this.options = options;
+
+        this.applyOptions(options);
+    }
+    applyOptions(options) {
+        if (typeof options.scale !== "undefined") {
+            this.x_scale = options.scale;
+            this.y_scale = options.scale;
+        }
+        if (typeof options.x_scale !== "undefined") {
+            this.x_scale = options.x_scale;
+        }
+        if (typeof options.y_scale !== "undefined") {
+            this.xy_scale = options.y_scale;
+        }
     }
     _draw(ctx) {
         ctx.save();
@@ -23,6 +37,14 @@ export default class Sprite {
     draw(ctx) {
 
     }
+    anchor(entity) {
+        this.x = entity.x;
+        this.y = entity.y;
+        this.animationTick();
+    }
+    animationTick() {
+        // we will implement this for animated sprites
+    }
 }
 
 export class StaticImageSprite extends Sprite {
@@ -33,12 +55,25 @@ export class StaticImageSprite extends Sprite {
 }
 
 export class AnimatedSprite extends Sprite {
-    constructor(gamekit) {
-        super(gamekit);
+    constructor(options) {
+        super(options);
         this.image_number = 0;
         this.image_max = 0;
         this.ticks_per_frame = 0;
         this._animation_tick = 0;
+    }
+    applyOptions(options) {
+        super.applyOptions(options);
+        if (typeof options.image_number !== "undefined") {
+            this.image_number = options.image_number;
+        }        
+        if (typeof options.image_max !== "undefined") {
+            this.image_max = options.image_max;
+        }  
+        if (typeof options.ticks_per_frame !== "undefined") {
+            this.ticks_per_frame = options.ticks_per_frame;
+        }        
+    
     }
     animationTick() {
         this._animation_tick++;

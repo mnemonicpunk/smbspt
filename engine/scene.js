@@ -1,7 +1,7 @@
 export default class Scene {
     constructor() {
-        this.gamekit = null;
         this.entities = [];
+        this.uptime = 0;
 
         this._next_scene = null;
     }
@@ -14,17 +14,18 @@ export default class Scene {
             ctx.restore();
         }
     }
-    tick(gamekit) {
-        this.gamekit = gamekit;
-
+    tick() {
         for (let i=0; i<this.entities.length; i++) {
             let e = this.entities[i];
             e.tick(this);
+        }   
+        for (let i=0; i<this.entities.length; i++) {
+            let e = this.entities[i];
+            e.sprite.anchor(e);
         }        
-    }
-    controls() {
-        return this.gamekit.controls;
-    }
+
+        this.uptime++;
+    }    
     add(entity) {
         this.entities.push(entity);
         return entity;
@@ -52,8 +53,6 @@ export default class Scene {
         return ret;
     }
     switchScene(next_scene) {
-        console.log("Switching scene: ");
-        console.dir(next_scene);
         this._next_scene = next_scene;
     }
 }

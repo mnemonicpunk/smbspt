@@ -7,7 +7,7 @@ export default class Entity {
         this.sprite = new Sprite();
     }
     draw(ctx) {
-
+        this.sprite._draw(ctx);
     }
     tick() {
 
