@@ -16,6 +16,9 @@ export default class GameKit {
         this.scale_x = 1;
         this.scale_y = 1;
 
+        this.fps = 0;
+        this.fps_timestamp = 0;
+
         this.assets = new AssetManager();
         this.controls = new GameKeys();
 
@@ -32,12 +35,23 @@ export default class GameKit {
         this.setResolution(this.canvas.clientWidth, this.canvas.clientHeight);
 
         let timestamp = performance.now();
+        let current_fps = 0;
+        this.fps_timestamp = timestamp;
         let _draw = function() {
             self.draw();
             if (performance.now() - timestamp > 1000/self._tick_num) {
                 timestamp = performance.now();
                 self.tick();
             }
+
+            // measure fps
+            current_fps++;
+            if (performance.now() > self.fps_timestamp + 1000) {
+                self.fps = current_fps;
+                self.fps_timestamp = performance.now();
+                current_fps = 0;
+            }
+
             window.requestAnimationFrame(_draw);
         }
         _draw();
