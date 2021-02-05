@@ -14,9 +14,8 @@ class GameOverEntity extends Entity {
         this.text_banner1 = this.sprite.add(new TextSprite({
             x: 960/2,
             y: 440/2,
-            scale: 0.5,
             text: "GAME OVER",
-            font: "144px Console",
+            font: "72px Console",
             color: "#fff",
             alignment: "center"
         }));
@@ -24,9 +23,8 @@ class GameOverEntity extends Entity {
         this.text_banner2 = this.sprite.add(new TextSprite({
             x: 960/2,
             y: 630/2,
-            scale: 0.5,
             text: this.scoreString(),
-            font: "72px Console",
+            font: "36px Console",
             color: "#fff",
             alignment: "center"
         }));
@@ -42,7 +40,7 @@ class GameOverEntity extends Entity {
 
         gamekit.assets.sound('bgm').play();
 
-        if (scene.uptime >= 300) {
+        if (scene.uptime >= 300 || gamekit.controls.checkReleased(" ")) {
             scene.switchScene(new TitleScene());    
         }
     }

@@ -5,10 +5,13 @@ export default class GameKeys {
         this.state = {};
 
         window.addEventListener('keydown', function(e) {
-            self.key(e.key, true);
+            self.keyDown(e.key);
         });
         window.addEventListener('keyup', function(e) {
-            self.key(e.key, false);
+            self.keyUp(e.key);
+        });
+        window.addEventListener('keypress', function(e) {
+            self.keyPress(e.key);
         });
     }
     afterStep() {
@@ -17,27 +20,24 @@ export default class GameKeys {
             this.state[i].released = false;
         }
     }
-    key(code, state) {
-        let s = {
-            down: state,
-            pressed: false,
-            released: false
-
-        }
-
-        // if we are already tracking this key
-        if (this.state[code] !== undefined) {
-            s = this.state[code];
-        }
-
-        s.down = state;
-        if (state) {
-            s.pressed = true;
-        } else {
-            s.released = true;
-        }
-        this.state[code] = s;
+    keyPress(code, state) {
+        this.state[code].down = true;
     }
+    keyDown(code) {
+        this.state[code] = {
+            down: true,
+            pressed: true,
+            released: false
+        }
+    }
+    keyUp(code) {
+        this.state[code] = {
+            down: false,
+            pressed: false,
+            released: true
+        }
+    }
+
     check(code) {
         if (this.state[code] !== undefined) {
             return this.state[code].down;
@@ -45,4 +45,19 @@ export default class GameKeys {
             return false;
         }
     }
+    checkPressed(code) {
+        if (this.state[code] !== undefined) {
+            return this.state[code].pressed;
+        } else {
+            return false;
+        }
+    }
+    checkReleased(code) {
+        if (this.state[code] !== undefined) {
+            return this.state[code].released;
+        } else {
+            return false;
+        }
+    }
+
 }

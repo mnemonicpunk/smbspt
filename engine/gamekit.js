@@ -82,6 +82,7 @@ export default class GameKit {
                 this.setScene(this.scene._next_scene);
             }            
         }
+        this.controls.afterStep();
         
     }
     resize() {

@@ -52,7 +52,7 @@ class Poop extends Entity {
             scale: 2,
             image_max: 3,
             image_number: Math.floor(Math.random() * 4),
-            ticks_per_frame: 15
+            ticks_per_frame: 9
         });
 
         this.ttl = 0;
@@ -102,8 +102,7 @@ class Player extends Entity {
             rows: 4,
             scale: 2,
             image_max: 2,
-            ticks_per_frame: 15,
-            position_tween: 0.9
+            ticks_per_frame: 3
         });
 
         this.dir = 0;
@@ -117,16 +116,16 @@ class Player extends Entity {
         let mspeed = 16;
 
         let ctrl = gamekit.controls;
-        if (ctrl.check("a")) {
+        if (ctrl.check("a") && this.dir != 0) {
             this.dir = 2;
         }
-        if (ctrl.check("d")) {
+        if (ctrl.check("d") && this.dir != 2) {
             this.dir = 0;
         }        
-        if (ctrl.check("w")) {
+        if (ctrl.check("w") && this.dir != 1) {
             this.dir = 3;
         }
-        if (ctrl.check("s")) {
+        if (ctrl.check("s") && this.dir != 3) {
             this.dir = 1;
         }
 

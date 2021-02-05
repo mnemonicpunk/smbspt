@@ -15,9 +15,8 @@ class TitleEntity extends Entity {
         this.text_banner = this.sprite.add(new TextSprite({
             x: 960/2,
             y: 810/2,
-            scale: 0.5,
             text: "Press SPACE to start!",
-            font: "72px Console",
+            font: "36px Console",
             color: "#f0f",
             outline: true,
             alignment: "center"
@@ -49,7 +48,7 @@ class TitleEntity extends Entity {
 
         if (bgm.isPlaying()) {
             let ctrl = gamekit.controls;
-            if (ctrl.check(" ")) {
+            if (ctrl.checkPressed(" ")) {
                 bgm.stop();
                 scene.switchScene(new GameScene());
             }
