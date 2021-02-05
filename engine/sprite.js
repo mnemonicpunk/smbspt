@@ -37,7 +37,10 @@ export default class Sprite {
         }
         if (typeof options.visible !== "undefined") {
             this.visible = options.visible;
-        }        
+        }
+        if (typeof options.alpha !== "undefined") {
+            this.alpha = options.alpha;
+        }               
     }
     _draw(ctx) {
         if (!this.visible) { return; }

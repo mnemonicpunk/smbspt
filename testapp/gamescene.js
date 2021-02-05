@@ -52,12 +52,17 @@ class Poop extends Entity {
             scale: 2,
             image_max: 3,
             image_number: Math.floor(Math.random() * 4),
-            ticks_per_frame: 9
+            ticks_per_frame: 9,
+            alpha: 0
         });
 
         this.ttl = 0;
     }
     tick(scene) {
+        this.sprite.alpha += 0.2;
+        if (this.sprite.alpha > 1) {
+            this.sprite.alpha = 1;
+        }
         if (scene.uptime > this.ttl) {
             scene.remove(this);
         }
@@ -96,13 +101,15 @@ class Debris extends Entity {
 class Player extends Entity {
     constructor() {
         super();
+        this.render_layer = 1000000;
         this.sprite = new SheetSprite({
             image: gamekit.assets.image('egg').get(),
             columns: 1,
             rows: 4,
             scale: 2,
             image_max: 2,
-            ticks_per_frame: 3
+            ticks_per_frame: 3,
+            position_tween: 0.25
         });
 
         this.dir = 0;

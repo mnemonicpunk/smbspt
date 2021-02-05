@@ -7,6 +7,9 @@ export default class Entity {
         this.xspeed = 0;
         this.yspeed = 0;
         this.sprite = new Sprite();
+
+        // used to determine render order, higher numbers mean entity is brought to the front more
+        this.render_layer = 0;
     }
     draw(ctx) {
         this.sprite._draw(ctx);
