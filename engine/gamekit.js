@@ -18,6 +18,7 @@ export default class GameKit {
 
         this.fps = 0;
         this.fps_timestamp = 0;
+        this.show_fps = false;
 
         this.assets = new AssetManager();
         this.controls = new GameKeys();
@@ -88,6 +89,15 @@ export default class GameKit {
         }
 
         this.ctx.drawImage(this.buffer, 0, 0, this.buffer.width, this.buffer.height, resized_pos.x, resized_pos.y, resized_buffer.w, resized_buffer.h);
+
+        if (this.show_fps) {
+            this.ctx.save();
+            this.ctx.fillStyle = "#000";
+            this.ctx.fillText(this.fps, 9, 9);
+            this.ctx.fillStyle = "#fff";
+            this.ctx.fillText(this.fps, 10, 10);            
+            this.ctx.restore();
+        }
     }
     tick() {
         if (this.scene != null) {
