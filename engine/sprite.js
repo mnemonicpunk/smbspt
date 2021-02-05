@@ -37,7 +37,7 @@ export default class Sprite {
         }
         if (typeof options.visible !== "undefined") {
             this.visible = options.visible;
-        }
+        }        
     }
     _draw(ctx) {
         if (!this.visible) { return; }
@@ -70,7 +70,7 @@ export default class Sprite {
         this.animationTick();
     }
     animationTick() {
-        // we will implement this for animated sprites
+        
     }
     add(node) {
         this.nodes.push(node);
@@ -163,7 +163,9 @@ export class AnimatedSprite extends Sprite {
         this.image_number = 0;
         this.image_max = 0;
         this.ticks_per_frame = 0;
-        this._animation_tick = 0;
+        this._animation_tick = 0; 
+
+        this.applyOptions(options);
     }
     applyOptions(options) {
         super.applyOptions(options);
@@ -175,7 +177,7 @@ export class AnimatedSprite extends Sprite {
         }  
         if (typeof options.ticks_per_frame !== "undefined") {
             this.ticks_per_frame = options.ticks_per_frame;
-        }        
+        }   
     }
     animationTick() {
         this._animation_tick++;
@@ -198,8 +200,6 @@ export class SheetSprite extends AnimatedSprite {
         let size_y = img.height / this.options.rows;
         let sx = size_x * (num % this.options.columns);
         let sy = size_y * (Math.floor(num / this.options.columns));
-
-        //console.log(num, sx, sy)
 
         ctx.drawImage(img, sx, sy, size_x, size_y, 0, 0, size_x, size_y);
     }

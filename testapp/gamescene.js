@@ -1,7 +1,6 @@
 import Scene from '../engine/scene.js';
 import Entity from "../engine/entity.js";
-import { SheetSprite } from "../engine/sprite.js";
-import { StaticImageSprite } from "../engine/sprite.js";
+import { SheetSprite, StaticImageSprite } from "../engine/sprite.js";
 
 import GameOverScene from "./gameoverscene.js";
 
