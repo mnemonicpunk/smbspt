@@ -4,6 +4,7 @@ export default class GameKeys {
 
         this.mouse_x = 0;
         this.mouse_y = 0;
+        this.mouse_button = [false, false, false, false, false];
 
         this.state = {};
 
@@ -19,6 +20,19 @@ export default class GameKeys {
 
         window.addEventListener('mousemove', function(e) {
             self.mouseMove(e.clientX, e.clientY);
+        });
+        window.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            self.mouseMove(e.clientX, e.clientY);
+            self.mouseButton(e.button, true);
+        });
+        window.addEventListener('mouseup', function(e) {
+            e.preventDefault();
+            self.mouseMove(e.clientX, e.clientY);
+            self.mouseButton(e.button, false);
+        });
+        window.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
         });
     }
     afterStep() {
@@ -81,7 +95,18 @@ export default class GameKeys {
 
         this.mouse_x = Math.round(new_x);
         this.mouse_y = Math.round(new_y);
-
-        //console.log(new_x, new_y);
+    }
+    mouseButton(button, state) {
+        this.mouse_button[button] = state;
+        console.log("Button " + button + " set to " + state);
+    }
+    leftMouse() {
+        return this.mouse_button[0].state;
+    }
+    rightMouse() {
+        return this.mouse_button[2].state;
+    }
+    middleMouse() {
+        return this.mouse_button[1].state;
     }
 }

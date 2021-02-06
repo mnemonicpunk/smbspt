@@ -102,15 +102,6 @@ export default class GameKit {
             this.ctx.fillText(this.fps, 10, 10);            
             this.ctx.restore();
         }
-
-        let mousetext = this.controls.mouse_x + " / " + this.controls.mouse_y + " [ " + Math.round(this.viewport.x) + " / " + Math.round(this.viewport.y) + " ]";
-
-        this.ctx.save();
-        this.ctx.fillStyle = "#000";
-        this.ctx.fillText(mousetext, 9, 29);
-        this.ctx.fillStyle = "#fff";
-        this.ctx.fillText(mousetext, 10, 30);            
-        this.ctx.restore();
     }
     tick() {
         if (this.scene != null) {
