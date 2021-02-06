@@ -12,9 +12,13 @@ export default class GameKit {
         this.ctx = this.canvas.getContext('2d');
         this.buffer = document.createElement('canvas');
         this.buffer_ctx = this.buffer.getContext('2d');
-
-        this.scale_x = 1;
-        this.scale_y = 1;
+        this.scale = 1;
+        this.viewport = {
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0
+        };
 
         this.fps = 0;
         this.fps_timestamp = 0;
@@ -32,8 +36,8 @@ export default class GameKit {
         window.addEventListener('resize', function() {
             self.resize();
         });
-        self.resize();
         this.setResolution(this.canvas.clientWidth, this.canvas.clientHeight);
+        self.resize();
 
         let timestamp = performance.now();
         let current_fps = 0;
@@ -71,22 +75,22 @@ export default class GameKit {
             this.buffer_ctx.restore();
         }
 
-        // and then pop that buffer onto the screen
-        
-        let scale = this.scale_x;
-        if (this.scale_y > this.scale_x) {
-            scale = this.scale_y;
-        }
-
         let resized_buffer = {
-            w: this.res_w / scale,
-            h: this.res_h / scale
+            w: this.res_w / this.scale,
+            h: this.res_h / this.scale
         }
 
         let resized_pos = {
             x: this.canvas.width/2 - resized_buffer.w / 2,
             y: this.canvas.height/2 - resized_buffer.h / 2
         }
+
+        this.viewport = {
+            x: resized_pos.x,
+            y: resized_pos.y,
+            w: resized_buffer.w,
+            h: resized_buffer.h
+        };
 
         this.ctx.drawImage(this.buffer, 0, 0, this.buffer.width, this.buffer.height, resized_pos.x, resized_pos.y, resized_buffer.w, resized_buffer.h);
 
@@ -98,6 +102,15 @@ export default class GameKit {
             this.ctx.fillText(this.fps, 10, 10);            
             this.ctx.restore();
         }
+
+        let mousetext = this.controls.mouse_x + " / " + this.controls.mouse_y + " [ " + Math.round(this.viewport.x) + " / " + Math.round(this.viewport.y) + " ]";
+
+        this.ctx.save();
+        this.ctx.fillStyle = "#000";
+        this.ctx.fillText(mousetext, 9, 29);
+        this.ctx.fillStyle = "#fff";
+        this.ctx.fillText(mousetext, 10, 30);            
+        this.ctx.restore();
     }
     tick() {
         if (this.scene != null) {
@@ -113,8 +126,15 @@ export default class GameKit {
         this.canvas.width = this.canvas.clientWidth;
         this.canvas.height = this.canvas.clientHeight;
 
-        this.scale_x = this.res_w / this.canvas.width;
-        this.scale_y = this.res_h / this.canvas.height;
+        let scale_x = this.res_w / this.canvas.clientWidth;
+        let scale_y = this.res_h / this.canvas.clientHeight;
+
+        let scale = scale_x;
+        if (scale_y > scale_x) {
+            scale = scale_y;
+        }
+        this.scale = scale;
+
     }
     setResolution(w, h) {
         this.res_w = w;
