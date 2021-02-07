@@ -6,12 +6,20 @@ export default class Scene {
         this.render_order = [];
         this.render_order_stale = true;
 
+        this.cam_x = Math.round(gamekit.res_w/2);
+        this.cam_y = Math.round(gamekit.res_h/2);
+        this.cam_zoom = 1;
+
         this.filter = new Filter(this.entities);
         this.uptime = 0;
 
         this._next_scene = null;
     }
     draw(ctx) {
+        ctx.save();
+        ctx.translate(-this.cam_x + gamekit.res_w/2, -this.cam_y + gamekit.res_h/2);
+        ctx.scale(this.cam_zoom, this.cam_zoom);
+
         if (this.render_order_stale) {
             this.generateRenderOrder();
             this.render_order_stale = false;
@@ -23,6 +31,8 @@ export default class Scene {
             e.draw(ctx);
             ctx.restore();
         }
+
+        ctx.restore();
     }
     tick() {
         this.filter.list = this.entities;
@@ -91,5 +101,12 @@ export default class Scene {
             order.splice(insert_index, 0, e);
         }
         this.render_order = order;
+    }
+    setCameraPosition(x, y) {
+        this.cam_x = x;
+        this.cam_y = y;
+    }
+    setCameraZoom(z) {
+        this.cam_zoom = z;
     }
 }
